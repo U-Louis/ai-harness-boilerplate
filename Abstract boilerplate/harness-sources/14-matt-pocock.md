@@ -2,6 +2,8 @@
 
 Research date: 27 October 2026. Scope: his own pages and repositories on coding-agent skills, instruction files, specs, tickets, review, and tests, 2024–2026. Read against `ai-harness-state-of-the-art.md`. That file was updated from this note on three practices: test seams confirmed before code, tracer-bullet tickets with blocking edges, and an unblended standards/spec review. Corrections already in the dry run were left in place.
 
+The factory skill of 31 October 2026, and the forge pages that start an unattended run, are in `17-unattended-runs.md`. This note was not rewritten. `skills/in-progress` was still out of scope on the date above.
+
 “Primary” means he wrote it, on mattpocock.com, aihero.dev, or a repository he owns. A skill file on `main` is the enforceable text. An AI Hero article is his explanation of that skill. Where the two disagree, the skill file read on 27 October 2026 wins. Living pages are dated by the `datePublished` field on the page when it has one, and by this fetch.
 
 He is an engineer and educator who teaches AI engineering through AI Hero. The tool that bears on this harness is the skill set in `mattpocock/skills`, not the Total TypeScript course.

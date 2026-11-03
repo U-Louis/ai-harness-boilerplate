@@ -4,7 +4,7 @@ What published practice still says about an agent harness when no language, fram
 
 This file is outer policy for a coding agent that already has a loop. Each prompt in [§17](#17-prompt-contracts) is one job. A later prompt may read an earlier artifact. It must not redo that job.
 
-Detailed notes for the claims in this file live in `harness-sources/` (01 through 16).
+Detailed notes for the claims in this file live in `harness-sources/` (01 through 17).
 
 ---
 
@@ -64,6 +64,10 @@ Each item is a claim a named page makes, kept close to what that page says.
 - A skill states only what the model does not already know, and it is tested on every model that will load it. A fragile command stays exact. An open task stays a direction. What is right for the strongest model can be too thin for a smaller one. (Anthropic, skill authoring guide, read 27 October 2026)
 - On issue-shaped tasks, a small tool loop matches a large product harness on pass rate and often costs less. Databricks, 8 July 2026, on a multi-million-line repo: same model, same effort, quality unchanged in the paired comparison; the vendor harness cost more than 2× the small one in some pairs, and the small one sent about 3× less context per turn. That post’s summary line also says quality changed. HarnessTax, 16 September 2026, on 30 tasks from each of two benchmarks: success within about ±2% and ±5%, and Claude Code often about 1.5× to 2× the cost of Pi. The authors say this may not hold when the work crosses sessions. (Pan et al.)
 - Logan Kilpatrick, who leads Google AI Studio and the Gemini API, and who was at OpenAI before Google: the generic agent loop is scaffolding the model absorbs. His estimate in June 2026 was about 12 months. Search and code execution stay outside. A model that only works in its own harness is not general. Google’s products sit on a harness, Antigravity. He is not a former Googler, and he does not say to run with no outer policy. (Training Data, 11 June 2026)
+- A run can start from a forge event or a clock, on a machine that does not keep the chat. GitHub Copilot cloud agent, fetched 3 November 2026: only a user with write access starts it; it cannot approve or merge; the person who asked cannot approve; Actions workflows do not run on its pull request until a person allows them. GitHub Agentic Workflows keep the agent job read-only and apply writes in a later job. GitLab attributes the merge request to the human who prompted, and a scheduled trigger has no human in the token. Stripe returns the branch after the second CI run. (The pages are in [§21](#21-unattended-runs).)
+- Pocock’s dictionary, 24 September 2026: a factory takes the human out of starting sessions, and not necessarily out of anything else. A dark factory is a codebase nobody reads. Reading the agent’s summary does not count as review. His skill of 31 October 2026 adds a disposable runner and three brakes. An explore task in that skill may label a ticket ready and start an implementer. [§21](#21-unattended-runs) does not take that edge.
+- StrongDM, quoted by Willison on 7 February 2026: code is neither written nor reviewed by humans, and the proof is a scenario stored outside the repository, which the writing agent does not see. This document does not install that rule.
+- One team, on 9 October 2026, posted an approval with a GitHub App installation token and the required review became satisfied. Copilot’s ban on approving does not extend to every app.
 
 ### Choices the sources leave open
 
@@ -83,6 +87,7 @@ Where the pages disagree, or name no number, a project still has to pick. The li
 - The glimpse-to-slice sequence in [§7](#7-outer-workflow-from-a-glimpse-to-the-pipeline) is a synthesis. No primary publishes it as one method.
 - The spec names test seams, including a journey seam, and G2 freezes the spec on a small change. A feature slice that is only one layer fails the plan gate. A wide mechanical change is expand, then migrate, then contract. Standards findings and spec findings stay in separate lists. The verifier stays a fresh session. `AGENTS.md` stays a short map into `docs/`.
 - A compensatory instruction is dated with the model it was written for. A model change removes it. A miss that repeats is written back. An invariant, a frozen oracle, a boundary, a fragile command, a judgement in the reviewer file, and the rule about who may merge stay, and they are not part of that deletion. Cherny’s ablation is the method. Applying it to this document’s outer policy, and keeping that policy through the ablation, is this document’s choice. [§19](#19-evolvability)
+- An unattended run has three starts: a person assigns or mentions, a clock, and a failed check. A second agent applying a label is not a start. The job that calls the model does not hold the token that writes issues, reviews, or the default branch. On a branch opened from an issue, a comment, a clock, or another run, a workflow that holds a secret waits until a person who did not write the triggering text allows it. Pushing the branch from the model job is a recorded exception, not the default. Metrics still leaves the diff unread, which fails Pocock’s test for review. That conflict stays. It does not ban Metrics, and it does not install StrongDM’s holdout. [§21](#21-unattended-runs)
 
 ---
 
@@ -693,6 +698,7 @@ Each gate names an owner and a consequence, and a hard gate stops the next step 
 | GC | Capacity and efficiency budgets | M6 and hot paths | hard at M7, soft before | Tool | No promote |
 | GR | Release rehearsal and rollback | M7 | hard | Release runner + steward | No promote |
 | GG | Doc and feature-list schema | yes | hard | Tool | No session start |
+| GW | Secret-bearing workflows on a branch an unattended run opened | when the start is an issue, a comment, a clock, or another run | hard | A person who did not write the triggering text | No workflow that holds a secret |
 
 A journey that has started to flake comes off the hard path that day. Google’s rule is that a flaky check teaches people to ignore red. Quarantine it and fix it (Fowler).
 
@@ -858,7 +864,7 @@ Isolated, for the inner-loop boot, means the run cannot see another slice’s da
 
 **What blocks.** A red invariant check stays blocking even after human review is dropped. OpenAI’s low-friction merge removes required human review and indefinite flake stalls. The post does not say a red check may land. Flakes in that post get a follow-up run. A consistently red check is not described as mergeable.
 
-GitHub rulesets are the merge block this document uses in substance. A required status check must pass. The rule names the app allowed to report the check. The coding agent is not on the bypass list. An agent identity that can set a commit status can paint a check green if the rule accepts any source.
+GitHub rulesets are the merge block this document uses in substance. A required status check must pass. The rule names the app allowed to report the check. The coding agent is not on the bypass list. An agent identity that can set a commit status can paint a check green if the rule accepts any source. An agent identity that can post an approval can satisfy a required review the same way. [§21](#21-unattended-runs) is the rule for a branch an unattended run opened: the model job does not hold the write token, and a workflow that holds a secret waits for GW.
 
 SLSA v1.2, source track: on the protected branch, history stays append-only, and Source Level 4 requires two trusted persons on the final revision. A coding agent is not a trusted person. The spec’s path for an unreviewed bot is an explicit trusted-robot exception, illustrated with import bots and Dependabot. This document does not grant that exception at the start. Two agent approvals are not Source Level 4.
 
@@ -988,6 +994,7 @@ Every row binds the session to a single next action, and the third rejection lea
 | Agent edits an oracle or a feature’s steps | Invalid on this document’s rule. Revert. Anthropic’s control is the prompt, plus JSON because Markdown was rewritten. Read-only tests stop the edit and do not stop special-casing. |
 | Tooling for the gate is down | Pause the gate. The implementer does not skip it and does not weaken it. |
 | Scope grows mid-slice | Cut back to the feature id, or stop for a new spec. |
+| Another run labels a ticket ready | Stop. That label is not a start. A person, a clock, or a failed check is. [§21](#21-unattended-runs) |
 
 The question at escalation is “what capability or rule is missing?”, which is Lopopolo’s question when the agent cannot proceed. Asking it because a slice hit this document’s cap is this document’s trigger. OpenAI keeps the review loop going until agent reviewers are satisfied, and does not use a third-reject handoff. The answer is written into the constitution or a check, by an agent, in a follow-up slice the steward accepts.
 
@@ -1006,6 +1013,7 @@ the slice spec if it exists, docs/features.json, and git history.
 Workspace writes stay inside this repository.
 You may not delete or rewrite accepted acceptance examples.
 You may not set passes to true unless you are the verifier under P4.
+You may not approve, merge, or label a ticket ready so that another run starts.
 If a required input is missing, stop and name the field.
 When you finish, append docs/progress.md and list artifacts written.
 ```
@@ -1295,12 +1303,53 @@ Read these bounds before treating a rule in this file as a settled result from a
 - This digest stops where a real project starts. The first product fills the constitution, including the complexity score and the routing posture, then runs M0–M1 before investing in the full lens set.
 - AISVS AC.4.1 is stricter than G4. [§5](#5-roles) records that departure. This document does not claim the standard.
 - A thin tool loop that matches a product harness on pass rate is a result about issue-shaped tasks. [§19](#19-evolvability) has the numbers. It is not a result about these gates.
+- An approval on a forge is a button. [§21](#21-unattended-runs) says what the person looks at. The button does not.
 
 ---
 
-## 21. Sources
+## 21. Unattended runs
 
-Primary pages used for the rules above. The notes in `harness-sources/` (01 through 16) are the check for conflicts, second-hand pages, and claims that were not carried into this file.
+A session in [§8](#8-inner-loop-every-module-every-slice) starts because a person opened it on a valid artifact. An unattended run starts because a forge event, a clock, or a failed check fired, on a machine that does not keep the previous chat. Pocock calls that arrangement a software factory (dictionary, 24 September 2026; skill, 31 October 2026). GitHub calls it a cloud agent or an agentic workflow. GitLab calls it a flow. Stripe calls it a minion. The controls below are the ones those pages publish. The name is not a control. Conflicts and the pages that were not carried are in `harness-sources/17-unattended-runs.md`.
+
+### What may start a run
+
+Three starts.
+
+- A person with write access assigns the issue or mentions the agent. Copilot receives the title, the body, and the comments that exist at assignment. Later comments on the issue are not in that run. GitLab’s event trigger runs as the intersection of the human and the service account, and attributes the merge request to the human, because prompting counts as authorship under the frameworks they name. Claude’s action rejects a bot actor unless the workflow lists it.
+- A clock. GitLab’s scheduled trigger has no human in the token, so the service account’s role is the whole permission. Copilot’s shared automation is attributed to Copilot and needs a further approval on a repository that already requires one. Claude’s schedule still fails the bot check when GitHub attributes the cron to a bot that was not listed.
+- A failed check. GitLab’s fix-pipeline flow may patch, may open a merge request, or may stop at a comment when the context is thin or the failure is security-sensitive. That stop is the “ask first” list applied to CI. A repair of a red check is a slice. A new behaviour still enters at G1.
+
+A second agent labeling a ticket ready is not a start. Pocock’s explore task does that for an easy call, and his decompose task publishes a ticket graph and starts an implementer. His stable `to-tickets` skill, already in [§8](#8-inner-loop-every-module-every-slice), shows the breakdown to a person first. The forge pages start from a person, a clock, or a failed check. G2 stays in front of implementation.
+
+Every start answers five questions, from his skill: what starts the run, what it reads and writes, what it starts next, where a human re-enters, and what stops two runs from taking the same ticket. The questions are a checklist. His list of banned synonyms is not a rule. The vendors will keep saying session, workflow, and job.
+
+### What the run may write
+
+The job that calls the model is read-only. It does not hold the token that opens issues, posts reviews, or writes the default branch. A later job, with a scoped token, applies a structured request after the model has exited. GitHub Agentic Workflows ship that split and call the later write a safe output. Secrets for the write stay in the later job.
+
+Copilot cloud agent pushes to one branch of its own, and Stripe’s minion pushes a branch from the devbox. Both are published. Both leave the read-only boundary. A constitution that wants that path records it as an exception. The exception does not extend to approval, merge, or the default branch. The runner is disposable either way. A cache of dependencies is a cache. The next run does not inherit the chat. Stripe’s rule files are per directory, attached as the agent walks the tree, because a global file fills the window. That is the short map in [§6](#6-persistent-artifacts).
+
+### What may run, and what may merge
+
+On a branch opened from an issue, a comment, a clock, or another run, a workflow that holds a secret does not run until a person who did not write the triggering text allows it. Copilot’s default is that Actions stay idle until a user with write access clicks Approve and run workflows, including when one automation opens the pull request that would start the next. The reason is the issue body. It is untrusted input. A workflow with secrets, started by that body, gives the injection the secrets. GW in [§11](#11-quality-gates) is that wait. Secret scanning after the run is a later net.
+
+The agent does not approve and does not merge. Copilot cannot do either, and the person who asked cannot approve. GitLab’s attribution makes the prompter the author so that a different person approves production. Stripe’s engineer opens the pull request and asks another engineer to review. An arbitrary GitHub App is not under Copilot’s ban. One repository, on 9 October 2026, accepted an installation token’s approval as the required review. Factory.ai’s review submits an approval when it finds nothing. [§14](#14-cicd-shape) is why the ruleset names the app that may report a check and excludes the agent’s identity from the review that satisfies the merge. A prompt does not do that work.
+
+The approval button is not G4. Copilot, GitLab, and Stripe require a person before the default branch. None of them define that act as reading the diff. Pocock’s dictionary says the summary does not count, and that a codebase nobody reads is a dark factory. Read and Metrics stay the constitution’s choice in [§5](#5-roles). Metrics leaves the diff unread and still fails his test. The conflict stays. G3 stays, because the button cannot see whether the oracle is real.
+
+A failing loop returns to a human. Stripe’s published count is one CI run, one repair, a second CI run, then the person. [§16](#16-stop-retry-escalate) already stops at the third rejection. His “few” does not replace that count.
+
+### What was not installed
+
+StrongDM’s factory removes the human read. The proof they describe is a scenario stored outside the repository, which the writing agent does not see, scored as a fraction of runs rather than as a green suite. The frozen examples in this document sit in the spec, and the implementer reads the spec. That is a weaker holdout. ImpossibleBench, in [§13](#13-test-how-when-with-what), is why a model that can see the test can special-case it. Metrics is not justified by pointing at StrongDM. Their token line and their satisfaction figure were not audited. They are not gates.
+
+Also refused, with the reasons in the source note: a reviewer that commits, a retro that edits the constitution on a timer, self-merge once the brakes feel trustworthy, one-way and two-way doors as a replacement for the risk list, and a repository-wide mutation score. Mutation on the slice’s decision is already in [§11](#11-quality-gates).
+
+---
+
+## 22. Sources
+
+Primary pages used for the rules above. The notes in `harness-sources/` (01 through 17) are the check for conflicts, second-hand pages, and claims that were not carried into this file.
 
 Harness, the runtime, and the outer policy:
 
@@ -1422,5 +1471,21 @@ Seams, slice cuts, and the two review lists. Conflicts, and claims that were not
 - Matt Pocock, dictionary entry `AGENTS.md`, read 27 October 2026. <https://github.com/mattpocock/dictionary-of-ai-coding/blob/main/dictionary/AGENTS.md.md>
 - Matt Pocock, “How To Make Codebases AI Agents Love,” 26 February 2026. <https://www.aihero.dev/how-to-make-codebases-ai-agents-love>
 - Matt Pocock, “5 Agent Skills I Use Every Day,” 16 March 2026. <https://www.aihero.dev/5-agent-skills-i-use-every-day>
+
+Unattended runs. Who may start one, who may write, and who may merge. Conflicts, and the factory sentences that were not adopted, are in `harness-sources/17-unattended-runs.md`.
+
+- GitHub, “Risks and mitigations for GitHub Copilot cloud agent,” fetched 3 November 2026. <https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/risks-and-mitigations>
+- GitHub, “About GitHub Agentic Workflows,” fetched 3 November 2026. <https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-github-agentic-workflows>
+- GitHub Agentic Workflows, safe outputs. <https://github.github.com/gh-aw/reference/safe-outputs/>
+- GitHub Next, “Continuous AI.” <https://githubnext.com/projects/continuous-ai/>
+- GitLab, Duo Agent Platform triggers, composite identity, external agents, and Fix CI/CD pipeline, fetched 3 November 2026. <https://docs.gitlab.com/user/duo_agent_platform/triggers/>
+- Anthropic, “Claude Code GitHub Actions,” fetched 3 November 2026. <https://code.claude.com/docs/en/github-actions>
+- Stripe, “Minions,” part 2. <https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2>
+- Matt Pocock, `software-factory` skill, 31 October 2026. <https://github.com/mattpocock/skills/blob/main/skills/in-progress/software-factory/SKILL.md>
+- Matt Pocock, AI Coding Dictionary, software factory and dark factory, 24 September 2026. <https://github.com/mattpocock/dictionary-of-ai-coding>
+- Matt Pocock, “Software Factories for Real Engineers,” page fetched 2 November 2026. Lessons were not public. <https://www.aihero.dev/cohorts/software-factories-for-real-engineers-xdy1m>
+- Simon Willison, “How StrongDM’s AI team build serious software without even looking at the code,” 7 February 2026. <https://simonwillison.net/2026/Feb/7/software-factory/>
+- Factory.ai, custom automations and automated code review, fetched 3 November 2026. <https://docs.factory.ai/software-factory/automations>
+- Vitruvian Software, “Every AI agent gets its own GitHub identity,” 9 October 2026. <https://vitruviansoftware.dev/blog/2026/10/09/every-ai-agent-gets-its-own-github-identity/>
 
 Augment’s harness guide (16 April 2026, updated 29 June 2026, <https://www.augmentcode.com/guides/harness-engineering-ai-coding-agents>) is the source of the one-turn / one-session / whole-build table and of the name Plan-Execute-Verify. It is not the origin of the OpenAI, Anthropic, Böckeler, or Hashimoto claims above. Its phrase “hard CI failures, not warnings” is not in the OpenAI post. developertoolkit.ai is the source of the four-gate vocabulary and the short risk list, not of the lab or OWASP rules. QualityLayer’s spec-driven guide (<https://qualitylayer.dev/blog/spec-driven-development-guide>) is vendor marketing and is not a source for the outer sequence. RayLabs is not the source for independent review. Nigh’s “2,500 repositories” figure is about Copilot persona files under `.github/agents/`, not a census of the AGENTS.md spec.
