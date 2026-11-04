@@ -144,7 +144,7 @@ Ranked by how directly the page says who may start a run, who may write, and who
 
 - Three starts: a person assigns or mentions, a clock, a failed check. Each clock and each failed-check start keeps a human on the merge, and a secret-bearing workflow waits.
 - The model job does not hold the token that writes issues, reviews, or the default branch. A later job writes. Copilot’s push to its own branch, and Stripe’s push, are the published exception. §21 records that exception. It does not make it the default.
-- On a branch opened from an issue, a comment, a clock, or another run, workflows that hold secrets do not run until a person who did not write the triggering text allows them.
+- On a branch opened from an issue, a comment, a clock, or another run, workflows that hold secrets do not run until a person who did not write the triggering text allows them. The further rule that a fetched report URL is data, and that private and metadata hosts are refused, is Spec Kit’s bug assess command, retrieved 4 November 2026. It is recorded in `05-outer-workflow.md` source 1a. It is not a claim of the forge pages in this note.
 - An agent approval counts only if the ruleset lets it. The ruleset in §14 excludes the agent’s identity. The Vitruvian measurement is why that sentence stays a ruleset and not a property of the forge.
 - Stripe’s second CI run is the published count beside this document’s two send-backs. The cap does not move.
 - Pocock’s five questions — what starts the run, what it reads and writes, what it starts next, where a human re-enters, what stops two runs — are the checklist for a start this document did not already name. His banned-word list is not.
